@@ -1,0 +1,20 @@
+#!/usr/bin/bash
+# for solaris
+# zfs snapshot script
+#
+# this just takes daily snapshots
+#
+# this will keep 31sts from last month and  jan 29,30,31 may be held over in Feb and
+# the start of march. .
+
+
+PATH=$PATH:/usr/bin/sparcv9
+POOLNAME=data
+
+for I in `zfs list | tail +2 | grep -v \@ | cut -d ' ' -f 1`  ; do
+# rmsnap may fail if this is the first time it is ran
+zfs destroy $I@day_snap-`date +%d`> /dev/null 2>&1;
+zfs snapshot $I@day_snap-`date +%d `;
+done
+
+
